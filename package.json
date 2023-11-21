@@ -13,6 +13,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.18",
+    "@mui/x-date-pickers": "^6.18.1",
     "ag-grid-community": "^30.2.1",
     "ag-grid-react": "^30.2.1",
     "dayjs": "^1.11.10",

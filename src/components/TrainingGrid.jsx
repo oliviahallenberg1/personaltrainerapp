@@ -3,6 +3,7 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-material.css'
 import { useState, useEffect } from "react"
 import dayjs from "dayjs"
+import AddTraining from "./AddTraining"
 
 export default function TrainingGrid() {
 
@@ -50,6 +51,7 @@ export default function TrainingGrid() {
         <>
             <div className="ag-theme-material"
                 style={{ height: '600px', width: '100%', margin: 'auto' }}>
+               <AddTraining AddTraining={AddTraining} getTrainings={getTrainings} />
                 <AgGridReact
                     rowData={training}
                     columnDefs={columns}
