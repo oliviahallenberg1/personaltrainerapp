@@ -6,7 +6,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export default function AddCustomer(props) {
+
+
+export default function EditCustomer(props) {
 
     //states
     const [customer, setCustomer] = useState({ firstname: '', lastname: '', streetaddress: '', postcode: '', city: '', email: '', phone: '' })
@@ -25,15 +27,17 @@ export default function AddCustomer(props) {
 
     const handleSave = () => {
         // handleClose();
-        addCustomer(customer);
+        updateCustomer(customer, props.customer.links[0].href);
         setOpen(false); // dialogin sulku
     }
+    const handleClick = () => {
+        setCustomer({ firstname: props.customer.firstname, lastname: props.customer.lastname, streetaddress: props.customer.streetaddress, postcode: props.customer.postcode, city: props.customer.city, email: props.customer.email, phone: props.customer.phone })
+        setOpen(true);
+    }
 
-    const REST_URL = 'https://traineeapp.azurewebsites.net/api/customers'
-    const addCustomer = (customer) => {
-        //REST API call
-        fetch(REST_URL, {
-            method: 'POST',
+    const updateCustomer = (customer, link) => {
+        fetch(link, {
+            method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -43,21 +47,23 @@ export default function AddCustomer(props) {
             .then(response => {
                 if (response.ok) {
                     props.getCustomers();
-                    //    setMsg('Customer was added succesfully')
+                    //  setMsg('Information was saved succesfully')
                     setOpen(true)
-                } else
-                    alert('Something went wrong while adding customer')
+                } else {
+                    console.log(JSON.stringify(customer));
+                    alert('Something went wrong while editing customers information')
+                }
             })
             .catch(error => console.log(error))
     }
-    // return
+
     return (
         <>
-            <Button onClick={() => setOpen(true)} variant="container">New Customer</Button>
+            <Button onClick={handleClick} variant="container">Edit</Button>
             <Dialog
                 open={open}
                 onClose={handleClose}>
-                <DialogTitle>New Customer</DialogTitle>
+                <DialogTitle>Edit Customer</DialogTitle>
                 <DialogContent>
                     <TextField
                         label="Firstname"

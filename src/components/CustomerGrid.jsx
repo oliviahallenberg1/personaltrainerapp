@@ -4,6 +4,7 @@ import 'ag-grid-community/styles/ag-theme-material.css'
 import { useState, useEffect } from "react"
 import { Button } from "@mui/material";
 import AddCustomer from "./AddCustomer";
+import EditCustomer from "./EditCustomer";
 
 
 export default function CustomerGrid() {
@@ -18,12 +19,29 @@ export default function CustomerGrid() {
         { field: 'city' },
         { field: 'email' },
         { field: 'phone' },
+        {
+            cellRenderer: params =>
+
+                <EditCustomer params={params} customer={params.data} getCustomers={getCustomers} />
+            ,
+            width: 120
+        },
+        {
+            cellRenderer: params =>
+                <Button size="small"
+                    color="error"
+                    onClick={() => deleteCustomer(params)}>
+                    Delete
+                </Button>,
+            width: 120
+        }
 
     ]
     useEffect(() => getCustomers(), [])
 
     const REST_URL = 'https://traineeapp.azurewebsites.net/api/customers';
 
+    // get all customers
     const getCustomers = () => {
         fetch(REST_URL)
             .then(response => response.json())
@@ -36,11 +54,29 @@ export default function CustomerGrid() {
             });
     }
 
+    // delete customer
+    const deleteCustomer = (params) => {
+        console.log("params: ", params.data.links[0].href)
+        fetch(params.data.links[0].href, { method: 'DELETE' })
+            .then(response => {
+                if (response.ok) {
+                    //    setMsg('Customer was deleted succesfully');
+                    //       setOpen(true);
+                    getCustomers();
+                } else {
+                    alert('Something went wrong!');
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            });
+    }
+
     return (
         <>
             <div className="ag-theme-material"
                 style={{ height: '600px', width: '100%', margin: 'auto' }}>
-                <AddCustomer AddCustomer={AddCustomer} />
+                <AddCustomer AddCustomer={AddCustomer} getCustomers={getCustomers} />
 
                 <AgGridReact
                     rowData={customers}
