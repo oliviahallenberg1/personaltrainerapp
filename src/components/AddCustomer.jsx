@@ -44,7 +44,7 @@ export default function AddCustomer(props) {
                 if (response.ok) {
                     props.getCustomers();
                     //    setMsg('Customer was added succesfully')
-                    setOpen(true)
+                  //  setOpen(true)
                 } else
                     alert('Something went wrong while adding customer')
             })

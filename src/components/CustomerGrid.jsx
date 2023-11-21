@@ -56,13 +56,15 @@ export default function CustomerGrid() {
 
     // delete customer
     const deleteCustomer = (params) => {
+        if (confirm("Please confirm action")) {
+
         console.log("params: ", params.data.links[0].href)
         fetch(params.data.links[0].href, { method: 'DELETE' })
             .then(response => {
                 if (response.ok) {
+                    getCustomers();
                     //    setMsg('Customer was deleted succesfully');
                     //       setOpen(true);
-                    getCustomers();
                 } else {
                     alert('Something went wrong!');
                 }
@@ -70,6 +72,7 @@ export default function CustomerGrid() {
             .catch(error => {
                 console.log(error)
             });
+        } 
     }
 
     return (
