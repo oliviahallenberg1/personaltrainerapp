@@ -1,33 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Customer from './components/Customer'
+import Training from './components/Training'
+// import Home from './components/Home'
+import { useState } from 'react';
+import { Tab, Tabs } from '@mui/material';
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [value, setValue] = useState('');
+
+  const handleChange = (_, value) => {
+    setValue(value);
+  }
 
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <Tabs
+          TabIndicatorProps={{ style: { background: 'black' }, text: 'black' }}
+          value={value}
+          onChange={handleChange}
+          centered={true}
+          color="pink"
+          style={{ backgroundColor: 'pink' }}
+          textColor="inherit"
+          indicatorColor="black">
+          <Tab
+            value="Customer"
+            label="Customer">
+          </Tab>
+          <Tab
+            value="Training"
+            label="Training">
+          </Tab>
+        </Tabs>
+        {value === "Customer" && <Customer />}
+        {value === "Training" && <Training />}
+
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
