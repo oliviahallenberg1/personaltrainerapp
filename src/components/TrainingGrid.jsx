@@ -4,6 +4,8 @@ import 'ag-grid-community/styles/ag-theme-material.css'
 import { useState, useEffect } from "react"
 import dayjs from "dayjs"
 import AddTraining from "./AddTraining"
+import { Button } from "@mui/material"
+
 
 export default function TrainingGrid() {
 
@@ -14,44 +16,69 @@ export default function TrainingGrid() {
         { field: 'date', headerName: 'Date', valueGetter: (params) => dayjs(params.data.date).format('DD.MM.YYYY') },
         { field: 'duration', headerName: 'Duration in minutes' },
         { field: 'activity' },
-        // { field: 'customer.id', headerName: 'customer' },
-
+        {
+            field: 'customer.id',
+            headerName: 'Customer',
+            valueGetter: (params) => {
+                const customer = params.data.customer;
+                if (customer && customer.firstname && customer.lastname) {
+                    return `${customer.firstname} ${customer.lastname}`;
+                } // jos customer tietoa ei löydy palauta tyhjä
+                else {
+                    return '';
+                }
+            }
+        }, {
+            cellRenderer: params =>
+                <Button size="small"
+                    color="error"
+                    onClick={() => deleteTraining(params)}>
+                    Delete
+                </Button>,
+            width: 120
+        }
     ]
     useEffect(() => getTrainings(), [])
-    // ei toimi vielä
-    const REST_URL = `https://traineeapp.azurewebsites.net/api/trainings`;
-   // const URL_FOR_CUSTOMERS = `https://traineeapp.azurewebsites.net/api/customers/id/trainings`
+
+    //delete training
+    const deleteTraining = (params) => {
+        if (confirm("Please confirm action")) {
+            console.log("params: ", `https://traineeapp.azurewebsites.net/trainings/${params.data.id}`)
+            fetch(`https://traineeapp.azurewebsites.net/api/trainings/${params.data.id}`, { method: 'DELETE' })
+                .then(response => {
+                    if (response.ok) {
+                        getTrainings();
+                        //    setMsg('Customer was deleted succesfully');
+                        //       setOpen(true);
+                    } else {
+                        alert('Something went wrong!');
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+        }
+    }
+
+    const REST_URL = "https://traineeapp.azurewebsites.net/gettrainings";
 
     const getTrainings = () => {
         fetch(REST_URL)
             .then(response => response.json())
             .then(responseData => {
-                console.log("responsedata " + responseData.content);
-                setTraining(responseData.content);
+                console.log("responsedata " + responseData);
+                setTraining(responseData);
             })
             .catch(error => {
                 console.log(error)
             });
     }
 
-    // const getCustomers = () => {
-    //     fetch(`https://traineeapp.azurewebsites.net/api/customers/${id}/trainings`)
-    //         .then(response => response.json())
-    //         .then(responseData => {
-    //             console.log("responsedata " + responseData.content);
-    //             setTraining(responseData.content);
-    //         })
-    //         .catch(error => {
-    //             console.log(error)
-    //         });
-    // }
-    // useEffect(() => getCustomers(), [])
-
     return (
         <>
             <div className="ag-theme-material"
                 style={{ height: '600px', width: '100%', margin: 'auto' }}>
-               <AddTraining AddTraining={AddTraining} getTrainings={getTrainings} />
+                <AddTraining addTraining={AddTraining} getTrainings={getTrainings} />
                 <AgGridReact
                     rowData={training}
                     columnDefs={columns}

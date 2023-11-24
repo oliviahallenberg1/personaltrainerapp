@@ -1,12 +1,13 @@
 import Customer from './components/Customer'
 import Training from './components/Training'
+import Home from './components/Home';
 // import Home from './components/Home'
 import { useState } from 'react';
 import { Tab, Tabs } from '@mui/material';
 
 function App() {
 
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState('Home');
 
   const handleChange = (_, value) => {
     setValue(value);
@@ -25,6 +26,10 @@ function App() {
           textColor="inherit"
           indicatorColor="black">
           <Tab
+            value="Home"
+            label="Home">
+          </Tab>
+          <Tab
             value="Customer"
             label="Customer">
           </Tab>
@@ -33,6 +38,7 @@ function App() {
             label="Training">
           </Tab>
         </Tabs>
+        {value === "Home" && <Home />}
         {value === "Customer" && <Customer />}
         {value === "Training" && <Training />}
 
