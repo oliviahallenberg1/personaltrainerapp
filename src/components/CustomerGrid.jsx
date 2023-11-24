@@ -5,6 +5,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@mui/material";
 import AddCustomer from "./AddCustomer";
 import EditCustomer from "./EditCustomer";
+import { CSVLink } from "react-csv";
 
 
 export default function CustomerGrid() {
@@ -58,22 +59,32 @@ export default function CustomerGrid() {
     const deleteCustomer = (params) => {
         if (confirm("Please confirm action")) {
 
-        console.log("params: ", params.data.links[0].href)
-        fetch(params.data.links[0].href, { method: 'DELETE' })
-            .then(response => {
-                if (response.ok) {
-                    getCustomers();
-                    //    setMsg('Customer was deleted succesfully');
-                    //       setOpen(true);
-                } else {
-                    alert('Something went wrong!');
-                }
-            })
-            .catch(error => {
-                console.log(error)
-            });
-        } 
+            console.log("params: ", params.data.links[0].href)
+            fetch(params.data.links[0].href, { method: 'DELETE' })
+                .then(response => {
+                    if (response.ok) {
+                        getCustomers();
+                        //    setMsg('Customer was deleted succesfully');
+                        //       setOpen(true);
+                    } else {
+                        alert('Something went wrong!');
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+        }
     }
+
+    const exportData = customers.map(customer => ({
+        Lastname: customer.lastname,
+        Firstname: customer.firstname,
+        Streetaddress: customer.streetaddress,
+        Postalcode: customer.postcode,
+        City: customer.city,
+        email: customer.email,
+        Phone: customer.phone
+    }));
 
     return (
         <>
@@ -87,6 +98,9 @@ export default function CustomerGrid() {
                     pagination={true}
                     paginationPageSize={10}>
                 </AgGridReact>
+                <CSVLink data={exportData}
+                    filename={"customers.csv"}
+                >Export</CSVLink>
             </div>
         </>
     )
