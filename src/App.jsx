@@ -5,6 +5,7 @@ import Calendar from './components/Calendar';
 // import Home from './components/Home'
 import { useState } from 'react';
 import { Tab, Tabs } from '@mui/material';
+import './App.css';
 
 function App() {
 

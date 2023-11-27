@@ -48,7 +48,7 @@ export default function AddTraining(props) {
         addTraining(training);
         setOpen(false); // dialogin sulku
     }
-    
+
     // Rest-url
     const REST_URL = 'https://traineeapp.azurewebsites.net/api/trainings'
     const addTraining = (training) => {
@@ -103,32 +103,37 @@ export default function AddTraining(props) {
                             name="date"
                             format="DD.MM.YYYY"
                             value={training.date}
-                            onChange={changeDate} />
+                            onChange={changeDate}
+                            margin="dense" />
                     </LocalizationProvider>
+                    <br />
                     <TextField
                         label="Duration in minutes"
                         name="duration"
                         value={training.duration}
                         onChange={handleInputChange}
-                    ></TextField> <TextField
+                        margin="dense"
+                    ></TextField>   <br /> <TextField
                         label="Activity"
                         name="activity"
                         value={training.activity}
                         onChange={handleInputChange}
-                    ></TextField>
+                        margin="dense"
+                    ></TextField>   <br />
                     <TextField
                         select
                         label="Customer"
                         name="customer"
                         value={training.customer}
                         onChange={handleInputChange}
+                        margin="dense"
                         sx={{ width: '200px' }} >
                         {customers.map(customer => (
                             <MenuItem key={customer.id} value={customer.id}>
                                 {`${customer.firstname} ${customer.lastname}`}
                             </MenuItem>
                         ))}
-                    </TextField>
+                    </TextField>   <br />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleSave}>Save</Button>
