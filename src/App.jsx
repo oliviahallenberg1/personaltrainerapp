@@ -1,7 +1,7 @@
 import Customer from './components/Customer'
 import Training from './components/Training'
 import Home from './components/Home';
-import Calendar from './components/Calendar';
+import TrainingCalendar from './components/TrainingCalendar';
 // import Home from './components/Home'
 import { useState } from 'react';
 import { Tab, Tabs } from '@mui/material';
@@ -40,14 +40,14 @@ function App() {
             label="Training">
           </Tab>
           <Tab
-            value="Calendar"
+            value="TrainingCalendar"
             label="Calendar">
           </Tab>
         </Tabs>
         {value === "Home" && <Home />}
         {value === "Customer" && <Customer />}
         {value === "Training" && <Training />}
-        {value === "Calendar" && <Calendar />}
+        {value === "TrainingCalendar" && <TrainingCalendar />}
 
       </div>
     </>
