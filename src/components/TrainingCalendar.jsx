@@ -16,13 +16,19 @@ export default function TrainingCalendar() {
         fetch(REST_URL)
             .then(response => response.json())
             .then(responseData => {
-                // lisätään treenille lopetusaika
-                const trainingsWithEndingTime = responseData.map(training => ({
+                // puretaan treenin 'date' aloitusaikaan ja lopetusaikaan
+                const trainingsWithJsDATE = responseData.map(training => ({
                     ...training,
-                    end: moment(training.date).add(training.duration, 'minutes').toISOString(),
+                    // muunnetaan JSON-datan string-muodossa oleva data Date-muotoon
+                    // jotta big-calendar pystyy lukemaan dataa
+                    // ja annetaan se aloitusajaksi 
+                    start:moment(training.date).toDate(),
+                    // annetaan uusi aika 'end', treenin lopetusaika
+                    // lopetusaika on treeninaloitus aika + treenin kesto
+                    end: moment(training.date).add(training.duration, 'minutes').toDate(),
                 }));
-                console.log(trainingsWithEndingTime);
-                setTrainings(trainingsWithEndingTime);
+                console.log(trainingsWithJsDATE);
+                setTrainings(trainingsWithJsDATE);
             })
             .catch(error => {
                 console.log(error)
@@ -32,9 +38,9 @@ export default function TrainingCalendar() {
     useEffect(() => getTrainings(), [])
 
 
-    const EventComponent = ({ event }) => (
+    const EventContent = ({ event }) => (
         <div>
-            <div>{event.activity}</div>
+            <div>{event.activity} | </div>
             {event.customer && (
                 <div>{`${event.customer.firstname} ${event.customer.lastname}`}</div>
             )}
@@ -46,11 +52,11 @@ export default function TrainingCalendar() {
             <Calendar
                 localizer={localizer}
                 events={trainings}
-                startAccessor="date"
+                startAccessor="start"
                 endAccessor="end"
                 style={{ height: 550 , backgroundColor: 'white'}}
                 components={{
-                    event: EventComponent,
+                    event: EventContent,
                 }}
             />
         </div>
