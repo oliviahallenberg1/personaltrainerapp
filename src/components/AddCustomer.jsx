@@ -43,8 +43,9 @@ export default function AddCustomer(props) {
             .then(response => {
                 if (response.ok) {
                     props.getCustomers();
-                    //    setMsg('Customer was added succesfully')
-                  //  setOpen(true)
+                    props.setOpen();
+                    props.setMsg('Customer was added succesfully')
+                  //setOpen(true)
                 } else
                     alert('Something went wrong while adding customer')
             })
@@ -53,7 +54,7 @@ export default function AddCustomer(props) {
     // return
     return (
         <>
-            <Button onClick={() => setOpen(true)} variant="container">New Customer</Button>
+            <Button onClick={() => setOpen(true)} variant="container" >New Customer</Button>
             <Dialog
                 open={open}
                 onClose={handleClose}>

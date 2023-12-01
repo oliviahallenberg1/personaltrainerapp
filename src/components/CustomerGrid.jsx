@@ -6,6 +6,7 @@ import { Button } from "@mui/material";
 import AddCustomer from "./AddCustomer";
 import EditCustomer from "./EditCustomer";
 import { CSVLink } from "react-csv";
+import { Snackbar } from "@mui/material";
 
 
 export default function CustomerGrid() {
@@ -13,13 +14,13 @@ export default function CustomerGrid() {
     //state-muuttujat
     const [customers, setCustomers] = useState([]);
     const columns = [
-        { field: 'firstname' },
-        { field: 'lastname' },
-        { field: 'streetaddress' },
-        { field: 'postcode' },
-        { field: 'city' },
-        { field: 'email' },
-        { field: 'phone' },
+        { field: 'firstname', sortable: true, filter: true },
+        { field: 'lastname', sortable: true, filter: true },
+        { field: 'streetaddress', sortable: true, filter: true },
+        { field: 'postcode', sortable: true, filter: true },
+        { field: 'city', sortable: true, filter: true },
+        { field: 'email', sortable: true, filter: true },
+        { field: 'phone', sortable: true, filter: true },
         {
             cellRenderer: params =>
 
@@ -39,6 +40,9 @@ export default function CustomerGrid() {
 
     ]
     useEffect(() => getCustomers(), [])
+
+    const [open, setOpen] = useState(false);
+    const [msg, setMsg] = useState('');
 
     const REST_URL = 'https://traineeapp.azurewebsites.net/api/customers';
 
@@ -64,8 +68,8 @@ export default function CustomerGrid() {
                 .then(response => {
                     if (response.ok) {
                         getCustomers();
-                        //    setMsg('Customer was deleted succesfully');
-                        //       setOpen(true);
+                        setMsg('Customer was deleted succesfully');
+                        setOpen(true);
                     } else {
                         alert('Something went wrong!');
                     }
@@ -76,6 +80,8 @@ export default function CustomerGrid() {
         }
     }
 
+    
+
     const exportData = customers.map(customer => ({
         Lastname: customer.lastname,
         Firstname: customer.firstname,
@@ -85,19 +91,24 @@ export default function CustomerGrid() {
         email: customer.email,
         Phone: customer.phone
     }));
-
+ 
     return (
         <>
             <div className="ag-theme-material"
                 style={{ height: '600px', width: '100%', margin: 'auto' }}>
-                <AddCustomer AddCustomer={AddCustomer} getCustomers={getCustomers} />
-
+                <AddCustomer AddCustomer={AddCustomer} getCustomers={getCustomers} setMsg={setMsg} setOpen={setOpen}/>
                 <AgGridReact
                     rowData={customers}
                     columnDefs={columns}
                     pagination={true}
                     paginationPageSize={10}>
                 </AgGridReact>
+                <Snackbar
+                    open={open}
+                    autoHideDuration={3000}
+                    onClose={() => setOpen(false)}
+                    message={msg} >
+                </Snackbar>
                 <CSVLink data={exportData}
                     filename={"customers.csv"}
                 >Export</CSVLink>

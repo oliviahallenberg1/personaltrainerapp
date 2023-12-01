@@ -16,36 +16,31 @@ export default function TrainingCalendar() {
         fetch(REST_URL)
             .then(response => response.json())
             .then(responseData => {
-                // puretaan treenin 'date' aloitusaikaan ja lopetusaikaan
-                const trainingsWithJsDATE = responseData.map(training => ({
+                // mapataan treeni niin, että kalenteri näyttää siitä activityn titlenä 
+                const trainingsWithJsDate = responseData.map(training => ({
                     ...training,
+                    id: training.id,
+                    title: `${training.activity} | ${training.customer.firstname} ${training.customer.lastname}`,
+                 
+                    // puretaan treenin 'date' aloitusaikaan ja lopetusaikaan
                     // muunnetaan JSON-datan string-muodossa oleva data Date-muotoon
                     // jotta big-calendar pystyy lukemaan dataa
                     // ja annetaan se aloitusajaksi 
-                    start:moment(training.date).toDate(),
+                    start: moment(training.date).toDate(),
                     // annetaan uusi aika 'end', treenin lopetusaika
                     // lopetusaika on treeninaloitus aika + treenin kesto
                     end: moment(training.date).add(training.duration, 'minutes').toDate(),
                 }));
-                console.log(trainingsWithJsDATE);
-                setTrainings(trainingsWithJsDATE);
+                console.log(trainingsWithJsDate);
+                setTrainings(trainingsWithJsDate);
             })
             .catch(error => {
                 console.log(error)
             });
     }
 
-    useEffect(() => getTrainings(), [])
+    useEffect(() => getTrainings(), []);
 
-
-    const EventContent = ({ event }) => (
-        <div>
-            <div>{event.activity} | </div>
-            {event.customer && (
-                <div>{`${event.customer.firstname} ${event.customer.lastname}`}</div>
-            )}
-        </div>
-    );
 
     const MyCalendar = () => (
         <div>
@@ -54,13 +49,12 @@ export default function TrainingCalendar() {
                 events={trainings}
                 startAccessor="start"
                 endAccessor="end"
-                style={{ height: 550 , backgroundColor: 'white'}}
-                components={{
-                    event: EventContent,
-                }}
+                style={{ height: 550, backgroundColor: 'white' }}
+                
             />
         </div>
     );
 
     return <MyCalendar />;
 }
+

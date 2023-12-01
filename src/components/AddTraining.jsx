@@ -92,7 +92,7 @@ export default function AddTraining(props) {
     // return
     return (
         <>
-            <Button onClick={() => setOpen(true)} variant="container" >New training</Button>
+            <Button onClick={() => setOpen(true)} variant="container"  >New training</Button>
             <Dialog
                 open={open}
                 onClose={handleClose}>

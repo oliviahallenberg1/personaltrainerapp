@@ -4,18 +4,18 @@ import 'ag-grid-community/styles/ag-theme-material.css'
 import { useState, useEffect } from "react"
 import dayjs from "dayjs"
 import AddTraining from "./AddTraining"
-import { Button } from "@mui/material"
+import { Button, Snackbar } from "@mui/material"
+
 
 
 export default function TrainingGrid() {
 
-
     //state-muuttujat
     const [training, setTraining] = useState([]);
     const columns = [
-        { field: 'date', headerName: 'Date', valueGetter: (params) => dayjs(params.data.date).format('DD.MM.YYYY') },
-        { field: 'duration', headerName: 'Duration in minutes' },
-        { field: 'activity' },
+        { field: 'date', headerName: 'Date', valueGetter: (params) => dayjs(params.data.date).format('DD.MM.YYYY'), sortable: true, filter: true },
+        { field: 'duration', headerName: 'Duration in minutes', sortable: true, filter: true },
+        { field: 'activity', sortable: true, filter: true },
         {
             field: 'customer.id',
             headerName: 'Customer',
@@ -23,11 +23,12 @@ export default function TrainingGrid() {
                 const customer = params.data.customer;
                 if (customer && customer.firstname && customer.lastname) {
                     return `${customer.firstname} ${customer.lastname}`;
-                } // jos customer tietoa ei löydy palauta tyhjä
+                }
+                // jos customer tietoa ei löydy palauta tyhjä
                 else {
                     return '';
                 }
-            }
+            }, sortable: true, filter: true
         }, {
             cellRenderer: params =>
                 <Button size="small"
@@ -40,6 +41,10 @@ export default function TrainingGrid() {
     ]
     useEffect(() => getTrainings(), [])
 
+    const [msg, setMsg] = useState('');
+    const [open, setOpen] = useState(false);
+
+
     //delete training
     const deleteTraining = (params) => {
         if (confirm("Please confirm action")) {
@@ -48,8 +53,8 @@ export default function TrainingGrid() {
                 .then(response => {
                     if (response.ok) {
                         getTrainings();
-                        //    setMsg('Customer was deleted succesfully');
-                        //       setOpen(true);
+                        setMsg('Training was deleted succesfully');
+                        setOpen(true);
                     } else {
                         alert('Something went wrong!');
                     }
@@ -85,6 +90,12 @@ export default function TrainingGrid() {
                     pagination={true}
                     paginationPageSize={10}>
                 </AgGridReact>
+                <Snackbar
+                    open={open}
+                    autoHideDuration={3000}
+                    onClose={() => setOpen(false)}
+                    message={msg} >
+                </Snackbar>
             </div>
         </>
     )

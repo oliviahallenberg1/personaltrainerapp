@@ -15,9 +15,8 @@ function App() {
 
     <>
       <AppBar
-        position="absolute"
+        position='absolute'
         color='transparent'
-
       >
         <Typography variant="h4" >
           Personal Trainer App
