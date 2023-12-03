@@ -78,8 +78,8 @@ export default function AddTraining(props) {
                 if (response.ok) {
                     console.log(response);
                     props.getTrainings();
-                    //  setMsg('Training was added successfully')
-                    //  setOpen(true)
+                    props.setMsg('Training was added successfully');
+                    //  props.setSnackbar(true)
                 } else {
                     alert('Something went wrong while adding training');
                 }

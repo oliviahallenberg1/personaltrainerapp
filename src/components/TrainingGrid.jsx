@@ -83,7 +83,7 @@ export default function TrainingGrid() {
         <>
             <div className="ag-theme-material"
                 style={{ height: '600px', width: '100%', margin: 'auto' }}>
-                <AddTraining addTraining={AddTraining} getTrainings={getTrainings} />
+                <AddTraining addTraining={AddTraining} getTrainings={getTrainings} setMsg={setMsg} setSnackBar={setOpen} msg={msg} />
                 <AgGridReact
                     rowData={training}
                     columnDefs={columns}

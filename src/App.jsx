@@ -1,9 +1,5 @@
-import Customer from './components/Customer'
-import Training from './components/Training'
-import Home from './components/Home';
-import TrainingCalendar from './components/TrainingCalendar';
-// import Home from './components/Home'
-import { useState } from 'react';
+
+
 import { AppBar, Tab, Tabs, Typography } from '@mui/material';
 import './App.css';
 
@@ -21,14 +17,16 @@ function App() {
         <Typography variant="h4" >
           Personal Trainer App
         </Typography>
+
         <nav>
           <Link to={'/'}>Home </Link>
           <Link to={'/customers'}>Customers </Link>
           <Link to={'/trainings'}>Trainings </Link>
           <Link to={'/calendar'}>Calendar </Link>
+          <Link to={'/charts'}>Charts  </Link>
         </nav>
-
-        <Outlet />
+      
+      <Outlet />
       </AppBar>
     </>
 

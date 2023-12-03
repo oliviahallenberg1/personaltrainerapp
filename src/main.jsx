@@ -7,6 +7,7 @@ import TrainingCalendar from './components/TrainingCalendar.jsx'
 import TrainingGrid from './components/TrainingGrid.jsx'
 import CustomerGrid from './components/CustomerGrid.jsx'
 import Home from './components/Home.jsx'
+import Charts from './components/Charts.jsx'
 
 const router = createBrowserRouter([
   { path: "/",
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: "/calendar",
     element: <TrainingCalendar/>
+  },
+  {
+    path: "/charts",
+    element: <Charts/>
   }
   ]
 }
